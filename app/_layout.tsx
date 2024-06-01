@@ -40,7 +40,7 @@ const RootLayout = () => {
         }} 
       />
       <Stack.Screen 
-        name="profile"
+        name="(tabs)/profile"
         options={{
           title: "Profile Page",
         }}
