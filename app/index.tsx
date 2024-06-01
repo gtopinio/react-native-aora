@@ -60,7 +60,10 @@ export default function Index() {
           </CustomButton>
         </View>
       </ScrollView>
-
+      <StatusBar
+        backgroundColor="#161622"
+        style="light"
+      />
     </SafeAreaView>
   );
 }
