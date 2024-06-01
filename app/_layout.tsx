@@ -39,12 +39,6 @@ const RootLayout = () => {
           headerShown: false,
         }} 
       />
-      <Stack.Screen 
-        name="(tabs)/profile"
-        options={{
-          title: "Profile Page",
-        }}
-      />
     </Stack>
   )
 }

@@ -9,7 +9,7 @@ export default function Index() {
     >
       <Text className="text-3xl font-pblack">Welcome to Aora!</Text>
       <StatusBar style="auto" />
-      <Link className="mt-4 text-blue-900" href={'/profile'}>Go to Profile</Link>
+      <Link className="mt-4 text-blue-900" href={'/home'}>Go to Home</Link>
     </View>
   );
 }
