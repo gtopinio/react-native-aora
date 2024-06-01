@@ -3,6 +3,7 @@ import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context"; // SafeAreaView is a component that renders a view that respects the safe area of the device
 import { images } from "@/constants";
+import CustomButton from "@/components/CustomButton";
 
 export default function Index() {
   return (
@@ -51,6 +52,12 @@ export default function Index() {
             >
               Where creativity meets innovation: embark on a journey of limitless exploration with Aora
           </Text>
+          <CustomButton
+            title="Continue with Email"
+            handlePress={() => {}}
+            containerStyle="w-full mt-7"
+          >
+          </CustomButton>
         </View>
       </ScrollView>
 
