@@ -16,8 +16,13 @@ const TabsLayout = () => {
             <Tabs
                 screenOptions={{
                     tabBarShowLabel: false,
+                    tabBarActiveTintColor: '#FFA001',
+                    tabBarInactiveTintColor: '#CDCDE0',
                     tabBarStyle: {
-                        padding: 2
+                        backgroundColor: '#161622', // Can't use constants here because were in an Object, which doesn't allow for dynamic values
+                        borderTopWidth: 1,
+                        borderTopColor: '#232533',
+                        height: 84,
                     },
                 }}
             >

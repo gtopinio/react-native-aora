@@ -19,6 +19,7 @@ const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
             />
             <Text
                 className={`text-xs ${focused ? 'font-psemibold' : 'font-pregular'}`}
+                style={{ color: color }}
             >
                 {name}
             </Text>
