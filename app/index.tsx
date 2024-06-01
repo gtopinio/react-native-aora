@@ -1,15 +1,59 @@
-import { Text, View } from "react-native";
+import { Image, ScrollView, Text, View } from "react-native";
 import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context"; // SafeAreaView is a component that renders a view that respects the safe area of the device
+import { images } from "@/constants";
 
 export default function Index() {
   return (
-    <View
-      className="flex-1 items-center justify-center bg-blue-100"
+    <SafeAreaView
+      className="bg-primary h-full"
     >
-      <Text className="text-3xl font-pblack">Welcome to Aora!</Text>
-      <StatusBar style="auto" />
-      <Link className="mt-4 text-blue-900" href={'/home'}>Go to Home</Link>
-    </View>
+      <ScrollView
+        contentContainerStyle={{
+          height: '100%', // This is needed because the content might be larger than supported smaller devices
+        }}
+      >
+        <View
+          className="w-full h-full justify-center items-center px-4"
+        >
+          <Image
+            source={images.logo}
+            className="w-[130px] h-[84px]"
+            resizeMode="contain" // This is needed to make the image fit the specified container bounds
+          />
+          <Image
+            source={images.cards}
+            className="max-w-[380px] w-full h-[300px]"
+            resizeMode="contain"
+          />
+          <View
+            className="relative mt-5"
+          >
+            <Text // Main caption container
+              className="text-3xl text-white font-bold text-center"
+            >
+              Discover Endless Possibilities with {''}
+              <Text
+                className="text-secondary-200"
+              >
+                Aora
+              </Text>
+            </Text>
+            <Image
+              source={images.path}
+              className="w-[136px] h-[15px] absolute -bottom-2 -right-8"
+              resizeMode="contain"
+            />
+          </View>
+          <Text
+              className="text-sm font-pregular text-gray-100 mt-7 text-center"
+            >
+              Where creativity meets innovation: embark on a journey of limitless exploration with Aora
+          </Text>
+        </View>
+      </ScrollView>
+
+    </SafeAreaView>
   );
 }
