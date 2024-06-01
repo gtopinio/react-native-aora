@@ -7,9 +7,9 @@ export default function Index() {
     <View
       className="flex-1 items-center justify-center bg-blue-100"
     >
-      <Text className="text-2xl font-bold">Welcome to Aora!</Text>
+      <Text className="text-3xl font-pblack">Welcome to Aora!</Text>
       <StatusBar style="auto" />
-      <Link className="mt-5 underline text-blue-900" href={'/profile'}>Go to Profile</Link>
+      <Link className="mt-4 text-blue-900" href={'/profile'}>Go to Profile</Link>
     </View>
   );
 }
