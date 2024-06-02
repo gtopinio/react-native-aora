@@ -9,13 +9,13 @@ interface CustomButtonProps {
     isLoading?: boolean,
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({
+const CustomButton = ({
     title,
     handlePress,
     containerStyle,
     textStyles,
     isLoading,
- }) => {
+ } : CustomButtonProps) => {
     return (
         <TouchableOpacity
             onPress={handlePress}
