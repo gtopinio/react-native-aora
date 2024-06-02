@@ -1,6 +1,7 @@
-import { View, Text, TextInput } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
 import { useState } from 'react'
 import React from 'react'
+import icons from '@/constants/icons'
 
 interface FormFieldProps {
     title: string,
@@ -39,8 +40,20 @@ const FormField = ({
                     placeholder={placeholder}
                     placeholderTextColor='#7B7B8B'
                     onChangeText={handleChangeText}
-                    secureTextEntry={title === 'Password' ? !setshowPassword : false}
+                    secureTextEntry={title === 'Password' ? !setshowPassword : false} // Users want to hide their password (i.e., showPassword should be false). Thus, we use the NOT operator (!) since secureTextEntry is only triggered with true, which is only obtained when showPassword is false (!(false) = true)
                 />
+                {title === 'Password' && (
+                    <TouchableOpacity
+                        onPress={() => setSetshowPassword(!setshowPassword)}
+                    >
+                        <Image
+                            source={setshowPassword ? icons.eye : icons.eyeHide}
+                            resizeMode='contain'
+                            className='w-6 h-6'
+                        />
+                    </TouchableOpacity>
+                
+                )}
             </View>
         </View>
     )
