@@ -1,5 +1,5 @@
 import { Image, ScrollView, Text, View } from "react-native";
-import { Link } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context"; // SafeAreaView is a component that renders a view that respects the safe area of the device
 import { images } from "@/constants";
@@ -16,7 +16,7 @@ export default function Index() {
         }}
       >
         <View
-          className="w-full h-full justify-center items-center px-4"
+          className="w-full min-h-[85vh] justify-center items-center px-4"
         >
           <Image
             source={images.logo}
@@ -54,7 +54,7 @@ export default function Index() {
           </Text>
           <CustomButton
             title="Continue with Email"
-            handlePress={() => {}}
+            handlePress={() => {router.push('sign-in')}}
             containerStyle="w-full mt-7"
           >
           </CustomButton>
