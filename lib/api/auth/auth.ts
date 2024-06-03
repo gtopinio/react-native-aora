@@ -64,7 +64,13 @@ export const signIn = async (
         const session = await account.createSession(email, password);
         return session;
     } catch (error) {
-        console.log(error);
-        throw new Error(String(error));
+        const errorParsed = new Error(String(error))
+
+        if (Object.values(bugsList).some(error => errorParsed.message.includes(error))) {
+            console.log("Skipping bug error: ", error);
+        } else {
+            console.log("Sign In User Error: ", error);
+            throw new Error(String(error));
+        }
     }
 }
