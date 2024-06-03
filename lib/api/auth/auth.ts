@@ -1,6 +1,6 @@
 import client, { config } from "@/lib/appwrite";
 import { Alert } from "react-native";
-import { Account, Avatars, Databases, ID } from "react-native-appwrite";
+import { Account, Avatars, Databases, ID, Query } from "react-native-appwrite";
 import { bugsList } from "../bugs/bugsList";
 
 const account = new Account(client);
@@ -72,5 +72,32 @@ export const signIn = async (
             console.log("Sign In User Error: ", error);
             throw new Error(String(error));
         }
+    }
+}
+
+export const getCurrentUser = async () => {
+    try {
+        const currentAccount = await account.get();
+        if(!currentAccount) {
+            console.log("No User Found")
+            Alert.alert('Error', 'No User Found');
+            throw new Error("No User Found");
+        }
+
+        const currentUser = await databases.listDocuments(
+            config.databaseId,
+            config.userCollectionId,
+            [Query.equal("accountId", currentAccount.$id)]
+        );
+
+        if(!currentUser) {
+            console.log("No User Found")
+            Alert.alert('Error', 'No User Found');
+            throw new Error("No User Found");
+        }
+
+        return currentUser.documents[0];
+    } catch (error) {
+        console.log("Get User Error: ", error);
     }
 }
