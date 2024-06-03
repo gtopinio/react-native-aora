@@ -1,6 +1,6 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import React from 'react'
 import images from '@/constants/images'
@@ -17,10 +17,39 @@ const SignUp = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const submitForm = () => {
-        setIsSubmitting(true);
-        createUser(form.username, form.email, form.password);
-        setIsSubmitting(false);
+    const submitForm = async () => {
+        if(!form.username || !form.email || !form.password) {
+            Alert.alert('Error', 'Please fill in all the fields')
+            return
+        }
+
+        setIsSubmitting(true)
+
+        try {
+
+            const result = await createUser(
+                form.username,
+                form.email,
+                form.password
+            )
+
+            // TODO: set it to global state using context
+
+            router.replace('home')
+            
+        } catch (error) {
+            const errorParsed = new Error(String(error))
+            console.log(error)
+            Alert.alert('Error', errorParsed.message)
+        }
+        finally {
+            setIsSubmitting(false)
+            setForm({
+                username: '',
+                email: '',
+                password: '',
+            })
+        }
     }
 
     return (
@@ -61,7 +90,7 @@ const SignUp = () => {
                         otherStyles={`mt-7`}
                     />
                     <CustomButton
-                        title='Sign In'
+                        title='Sign Up'
                         handlePress={submitForm}
                         containerStyle={`mt-7`}
                         isLoading={isSubmitting}
