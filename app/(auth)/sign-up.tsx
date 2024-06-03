@@ -1,11 +1,12 @@
 import { View, Text, ScrollView, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { Link } from 'expo-router'
 import { useState } from 'react'
 import React from 'react'
 import images from '@/constants/images'
 import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'
-import { Link } from 'expo-router'
+import { createUser } from '@/lib/api/auth/auth'
 
 const SignUp = () => {
     const [form, setForm] = useState({
@@ -17,7 +18,9 @@ const SignUp = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const submitForm = () => {
-
+        setIsSubmitting(true);
+        createUser(form.username, form.email, form.password);
+        setIsSubmitting(false);
     }
 
     return (
