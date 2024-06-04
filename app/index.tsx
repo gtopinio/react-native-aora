@@ -3,9 +3,16 @@ import { Redirect, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context"; // SafeAreaView is a component that renders a view that respects the safe area of the device
 import { images } from "@/constants";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import CustomButton from "@/components/CustomButton";
 
 export default function Index() {
+  const { isLoading, isLoggedIn } : any = useGlobalContext();
+
+  if(!isLoading && isLoggedIn) {
+    return <Redirect href={`/home`} />
+  }
+
   return (
     <SafeAreaView
       className="bg-primary h-full"

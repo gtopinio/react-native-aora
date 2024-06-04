@@ -2,11 +2,13 @@ import { View, Text, ScrollView, Image, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useState } from 'react'
 import { Link, router } from 'expo-router'
+import { signIn } from '@/lib/api/auth/auth'
+import { useGlobalContext } from '@/context/GlobalProvider'
+import { getCurrentUser } from '@/lib/api/auth/auth'
 import React from 'react'
 import images from '@/constants/images'
 import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'
-import { signIn } from '@/lib/api/auth/auth'
 
 const SignIn = () => {
     const [form, setForm] = useState({
@@ -15,6 +17,7 @@ const SignIn = () => {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { setUser, setIsLoggedIn } : any = useGlobalContext();
 
     const submitForm = async () => {
         if(!form.email || !form.password) {
@@ -31,7 +34,24 @@ const SignIn = () => {
                 form.password
             )
 
-            // TODO: set it to global state using context
+            const result = await getCurrentUser()
+
+            if (!result) {
+                console.log("Account not signed in")
+                Alert.alert('Error', 'Account does not exist');
+                throw new Error("Account not signed in");
+            }
+
+            console.log("New User: ", result)
+
+            // Apply Global Context
+            setUser(result)
+            setIsLoggedIn(true);
+
+            setForm({
+                email: '',
+                password: '',
+            })
 
             router.replace('home')
             
@@ -42,10 +62,6 @@ const SignIn = () => {
         }
         finally {
             setIsSubmitting(false)
-            setForm({
-                email: '',
-                password: '',
-            })
         }
     }
 

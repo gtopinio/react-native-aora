@@ -1,5 +1,4 @@
 import client, { config } from "@/lib/appwrite";
-import { Alert } from "react-native";
 import { Account, Avatars, Databases, ID, Query } from "react-native-appwrite";
 import { bugsList } from "../bugs/bugsList";
 
@@ -22,7 +21,6 @@ export const createUser = async (
 
         if (!newAccount) {
             console.log("Account not created")
-            Alert.alert('Error', 'Account not created');
             throw new Error("Account not created");
         } else {
             const avatarUrl = avatars.getInitials(username);
@@ -48,7 +46,7 @@ export const createUser = async (
         const errorParsed = new Error(String(error))
 
         if (Object.values(bugsList).some(error => errorParsed.message.includes(error))) {
-            console.log("Skipping bug error: ", error);
+            console.log("Skipping bug: ", error);
         } else {
             console.log("Create User Error: ", error);
             throw new Error(String(error));
@@ -61,13 +59,13 @@ export const signIn = async (
     password: string,
 ) => {
     try {
-        const session = await account.createSession(email, password);
+        const session = await account.createEmailPasswordSession(email, password);
         return session;
     } catch (error) {
         const errorParsed = new Error(String(error))
 
         if (Object.values(bugsList).some(error => errorParsed.message.includes(error))) {
-            console.log("Skipping bug error: ", error);
+            console.log("Skipping bug: ", error);
         } else {
             console.log("Sign In User Error: ", error);
             throw new Error(String(error));
@@ -75,14 +73,26 @@ export const signIn = async (
     }
 }
 
+export const getAccount = async () => {
+    try {
+        const session = await account.getSession('current');
+        
+        if (!session) {
+            console.log("No Session Found")
+            throw new Error("No Session Found");
+        }
+
+        return await account.get();
+    } catch (error) {
+        console.log("Get Account Error: ", error);
+        throw new Error(String(error));
+    }
+}
+
 export const getCurrentUser = async () => {
     try {
-        const currentAccount = await account.get();
-        if(!currentAccount) {
-            console.log("No User Found")
-            Alert.alert('Error', 'No User Found');
-            throw new Error("No User Found");
-        }
+        const currentAccount = await getAccount()
+        if (!currentAccount) throw new Error("No Account Found");
 
         const currentUser = await databases.listDocuments(
             config.databaseId,
@@ -92,12 +102,13 @@ export const getCurrentUser = async () => {
 
         if(!currentUser) {
             console.log("No User Found")
-            Alert.alert('Error', 'No User Found');
             throw new Error("No User Found");
         }
 
         return currentUser.documents[0];
+
     } catch (error) {
         console.log("Get User Error: ", error);
+        return false
     }
 }
