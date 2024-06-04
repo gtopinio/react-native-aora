@@ -2,6 +2,7 @@ import { View, Text, FlatList, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React from 'react'
 import { images } from '@/constants'
+import SearchBar from '@/components/SearchBar'
 
 const Home = () => {
     return (
@@ -43,6 +44,12 @@ const Home = () => {
                             />
                             </View>
                         </View>
+                        <SearchBar
+                            title=''
+                            value=''
+                            handleChangeText={() => {}}
+                            placeholder='Search for your favorite movies'
+                        />
                     </View>
                 )}
                 renderItem={({ item }) => (
