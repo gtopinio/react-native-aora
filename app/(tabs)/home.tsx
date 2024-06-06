@@ -48,7 +48,7 @@ const Home = () => {
                             title=''
                             value=''
                             handleChangeText={() => {}}
-                            placeholder='Search for your favorite movies'
+                            placeholder='Search for a video topic'
                         />
                         <View
                             // Latest videos section
