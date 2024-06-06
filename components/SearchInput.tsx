@@ -3,7 +3,7 @@ import { useState } from 'react'
 import React from 'react'
 import icons from '@/constants/icons'
 
-interface SearchBarProps {
+interface SearchInputProps {
     title: string,
     value: string,
     handleChangeText: (e: any) => void,
@@ -12,14 +12,14 @@ interface SearchBarProps {
     keyboardType?: string,
 }
 
-const SearchBar = ({ 
+const SearchInput = ({ 
     title,
     value,
     placeholder,
     handleChangeText, 
     otherStyles, 
     keyboardType
-}: SearchBarProps) => {
+}: SearchInputProps) => {
 
     return (
             <View
@@ -43,4 +43,4 @@ const SearchBar = ({
     )
 }
 
-export default SearchBar
+export default SearchInput
