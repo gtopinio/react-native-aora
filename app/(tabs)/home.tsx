@@ -4,6 +4,7 @@ import React from 'react'
 import { images } from '@/constants'
 import SearchInput from '@/components/SearchInput'
 import Trending from '@/components/Trending'
+import EmptyState from '@/components/EmptyState'
 
 const Home = () => {
     return (
@@ -11,8 +12,9 @@ const Home = () => {
             className="bg-primary h-full"
         >
             <FlatList
-                data={[{$id: 1}, {$id: 2}, {$id: 3}]}
-                keyExtractor={(item) => item.$id.toString()}
+                // data={[{ $id: 1 }, { $id: 2 }, { $id: 3]}
+                data={[]}
+                keyExtractor={(item: any) => item.$id.toString()}
                 ListHeaderComponent={() => (
                     <View
                         className='my-6 px-4 space-y-6'
@@ -72,6 +74,12 @@ const Home = () => {
                     >
                         {item.$id}
                     </Text>
+                )}
+                ListEmptyComponent={() => (
+                    <EmptyState
+                        title='No Videos Found'
+                        subtitle='Be the first to upload a video!'
+                    />
                 )}
             />
         </SafeAreaView>

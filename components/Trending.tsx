@@ -15,7 +15,7 @@ const Trending = ({
             keyExtractor={(item) => item.$id.toString()}
             renderItem={({ item }) => (
                 <Text
-                        className='text-white'
+                    className='text-white'
                 >
                     {item.$id}
                 </Text>
