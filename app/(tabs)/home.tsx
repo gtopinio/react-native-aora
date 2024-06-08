@@ -3,10 +3,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect, useState } from 'react'
 import { images } from '@/constants'
 import { getAllPosts } from '@/lib/api/posts/posts'
+import { Post } from '@/lib/interfaces/types'
 import SearchInput from '@/components/SearchInput'
 import Trending from '@/components/Trending'
 import EmptyState from '@/components/EmptyState'
 import queries from '@/lib/hooks/queries'
+import VideoCard from '@/components/VideoCard'
 
 const Home = () => {
     const { data: posts, refreshData } = queries(getAllPosts);
@@ -24,9 +26,8 @@ const Home = () => {
             className="bg-primary h-full"
         >
             <FlatList
-                data={[{ $id: 1 }, { $id: 2 }, { $id: 3} ]}
-                // data={[]}
-                keyExtractor={(item: any) => item.$id.toString()}
+                data={posts}
+                keyExtractor={(item: Post) => item.$id.toString()}
                 ListHeaderComponent={() => (
                     <View
                         className='my-6 px-4 space-y-6'
@@ -81,11 +82,9 @@ const Home = () => {
                     </View>
                 )}
                 renderItem={({ item }) => (
-                    <Text
-                        className='text-3xl text-white'
-                    >
-                        {item.$id}
-                    </Text>
+                    <VideoCard
+                        video={item}
+                    />
                 )}
                 ListEmptyComponent={() => (
                     <EmptyState
