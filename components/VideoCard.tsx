@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { Post } from '@/lib/interfaces/types'
 import { icons } from '@/constants'
@@ -12,6 +12,7 @@ const VideoCard = ({
     video : { title, thumbnail, prompt, video, creator: { username, avatar } }
 } : VideoCardProps) => {
     const [play, setPlay] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     return (
         <View // Main view for (post details + creator + menu) and video thumbnail
@@ -61,19 +62,28 @@ const VideoCard = ({
             </View>
 
             {play ? (
-                <Video
-                    source={{ uri: video }}
-                    className='w-full h-60 rounded-xl'
-                    resizeMode={ResizeMode.CONTAIN}
-                    shouldPlay
-                    useNativeControls
-                    onPlaybackStatusUpdate={(status : any) => {
-                        if (status.didJustFinish) {
-                            setPlay(false);
-                        }
-                    }}
-                    
-                />
+                loading ? (
+                    <ActivityIndicator
+                        size="large"
+                        color="#FFA001"
+                        className='w-full h-60 rounded-xl mt-3 bg-white/10'
+                    />
+                    ) : (
+                        <Video
+                            source={{ uri: video }}
+                            className='w-full h-60 rounded-xl'
+                            resizeMode={ResizeMode.CONTAIN}
+                            shouldPlay
+                            useNativeControls
+                            onLoadStart={() => setLoading(true)}
+                            onLoad={() => setLoading(false)}
+                            onPlaybackStatusUpdate={(status : any) => {
+                                if (status.didJustFinish) {
+                                    setPlay(false);
+                                }
+                            }}
+                        />
+                    )
             ) : (
                 // Video Thumbnail to play instead of regular button
                 <TouchableOpacity

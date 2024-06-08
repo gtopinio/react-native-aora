@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity, ImageBackground, Image } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, ImageBackground, Image, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { Post } from '@/lib/interfaces/types'
 import * as Animatable from 'react-native-animatable'
@@ -38,6 +38,7 @@ const TrendingItems = ({
     activeItem
 }: TrendingItemProps) => {
     const [play, setPlay] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     return (
         <Animatable.View
@@ -46,19 +47,28 @@ const TrendingItems = ({
             className='mr-5'
         >
             {play ? (
+                loading ? (
+                <ActivityIndicator
+                    size="large"
+                    color="#FFA001"
+                    className='w-52 h-72 rounded-[35px] mt-3 bg-white/10'
+                />
+                ) : (
                     <Video
                         source={{ uri: item.video }}
                         className='w-52 h-72 rounded-[35px] mt-3 bg-white/10'
                         resizeMode={ResizeMode.CONTAIN}
                         shouldPlay
                         useNativeControls
+                        onLoadStart={() => setLoading(true)}
+                        onLoad={() => setLoading(false)}
                         onPlaybackStatusUpdate={(status : any) => {
                             if (status.didJustFinish) {
                                 setPlay(false);
                             }
                         }}
-                        
                     />
+                )
             ) : (
                 <TouchableOpacity
                     className='relative justify-center items-center'
