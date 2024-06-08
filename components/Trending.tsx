@@ -51,6 +51,7 @@ const TrendingItems = ({
                         className='w-52 h-72 rounded-[35px] mt-3 bg-white/10'
                         resizeMode={ResizeMode.CONTAIN}
                         shouldPlay
+                        useNativeControls
                         onPlaybackStatusUpdate={(status : any) => {
                             if (status.didJustFinish) {
                                 setPlay(false);

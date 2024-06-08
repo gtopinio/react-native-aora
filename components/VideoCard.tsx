@@ -2,13 +2,14 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { Post } from '@/lib/interfaces/types'
 import { icons } from '@/constants'
+import { ResizeMode, Video } from 'expo-av'
 
 interface VideoCardProps {
     video: Post
 }
 
 const VideoCard = ({ 
-    video : { title, thumbnail, prompt, creator: { username, avatar } }
+    video : { title, thumbnail, prompt, video, creator: { username, avatar } }
 } : VideoCardProps) => {
     const [play, setPlay] = useState(false);
 
@@ -60,11 +61,19 @@ const VideoCard = ({
             </View>
 
             {play ? (
-                <Text
-                    className='text-white font-psemibold text-lg mt-3'
-                >
-                    Playing
-                </Text>
+                <Video
+                    source={{ uri: video }}
+                    className='w-full h-60 rounded-xl'
+                    resizeMode={ResizeMode.CONTAIN}
+                    shouldPlay
+                    useNativeControls
+                    onPlaybackStatusUpdate={(status : any) => {
+                        if (status.didJustFinish) {
+                            setPlay(false);
+                        }
+                    }}
+                    
+                />
             ) : (
                 // Video Thumbnail to play instead of regular button
                 <TouchableOpacity
