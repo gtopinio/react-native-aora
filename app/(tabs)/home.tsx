@@ -1,13 +1,37 @@
-import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
+import { View, Text, FlatList, Image, RefreshControl, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { images } from '@/constants'
 import SearchInput from '@/components/SearchInput'
 import Trending from '@/components/Trending'
 import EmptyState from '@/components/EmptyState'
+import { getAllPosts } from '@/lib/api/posts/posts'
 
 const Home = () => {
-    const [refreshing, setRefreshing] = useState(false)
+    const [data, setdata] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [refreshing, setRefreshing] = useState(false);
+
+    useEffect(() => {
+        fetchData();
+        console.log('Data: ', data);
+    }, []);
+
+    const fetchData = async () => {
+        setIsLoading(true);
+        try {
+            const response = await getAllPosts();
+            setdata(response as any);
+        } catch (error) {
+            console.log("Fetch Data Error: ", error);
+            const errorParsed = new Error(String(error));
+            Alert.alert('Error', errorParsed.message);
+        } finally {
+            setIsLoading(false);
+        }
+            
+    }
 
     const onRefresh = async () => {
         setRefreshing(true)
