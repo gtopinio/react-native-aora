@@ -9,14 +9,14 @@ import EmptyState from '@/components/EmptyState'
 import queries from '@/lib/hooks/queries'
 
 const Home = () => {
-    const { data: posts, isLoading } = queries(getAllPosts);
+    const { data: posts, refreshData } = queries(getAllPosts);
 
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = async () => {
-        setRefreshing(true)
-        // Fetch data here (in case new video data is available)
-        setRefreshing(false)
+        setRefreshing(true);
+        await refreshData();
+        setRefreshing(false);
     }
 
     return (

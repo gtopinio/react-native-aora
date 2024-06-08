@@ -19,13 +19,17 @@ const queries = (fn: any) => {
             Alert.alert('Error', errorParsed.message);
         } finally {
             setIsLoading(false);
-        }
-            
+        }       
+    }
+
+    const refreshData = async () => {
+        fetchData();
     }
 
     return {
         data,
         isLoading,
+        refreshData,
     }
 }
 
