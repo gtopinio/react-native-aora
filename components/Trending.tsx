@@ -1,8 +1,9 @@
 import { View, Text, FlatList } from 'react-native'
 import React from 'react'
+import { Post } from '@/lib/interfaces/types'
 
 interface TrendingProps {
-    posts: any[]
+    posts: Post[]
 }
 
 const Trending = ({

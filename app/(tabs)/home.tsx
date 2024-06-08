@@ -2,7 +2,7 @@ import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect, useState } from 'react'
 import { images } from '@/constants'
-import { getAllPosts } from '@/lib/api/posts/posts'
+import { getAllLatestPosts, getAllPosts } from '@/lib/api/posts/posts'
 import { Post } from '@/lib/interfaces/types'
 import SearchInput from '@/components/SearchInput'
 import Trending from '@/components/Trending'
@@ -12,6 +12,7 @@ import VideoCard from '@/components/VideoCard'
 
 const Home = () => {
     const { data: posts, refreshData } = queries(getAllPosts);
+    const { data: latestPosts } = queries(getAllLatestPosts);
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -76,7 +77,7 @@ const Home = () => {
                                 Latest Videos
                             </Text>
                             <Trending
-                                posts={[ { $id: 1 }, { $id: 2 }, { $id: 3 } ] ?? []}
+                                posts={latestPosts ?? []}
                             />
                         </View>
                     </View>
