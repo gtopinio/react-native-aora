@@ -10,7 +10,7 @@ interface TrendingProps {
 
 interface TrendingItemProps {
     item: Post
-    activeItem: Post
+    activeItem: any
 }
 
 const zoomIn : any = {
@@ -18,7 +18,7 @@ const zoomIn : any = {
         scale: 0.9
     },
     1:{
-        scale: 1
+        scale: 1.1
     },
 }
 
@@ -40,7 +40,7 @@ const TrendingItems = ({
 
     return (
         <Animatable.View
-            animation={activeItem.$id === item.$id ? zoomIn : zoomOut}
+            animation={activeItem === item.$id ? zoomIn : zoomOut}
             duration={500}
             className='mr-5'
         >
@@ -76,10 +76,21 @@ const TrendingItems = ({
 const Trending = ({
     posts
 }: TrendingProps) => {
-    const [activeItem, setActiveItem] = useState(posts[1]);
+    const [activeItem, setActiveItem] = useState(posts[0]);
+    const viewableItemsChanged = ({ viewableItems }: any) => {
+        if (viewableItems.length > 0) {
+            setActiveItem(viewableItems[0].key); // We got the key from the FlatList's keyExtractor
+        }
+    }
 
     return (
         <FlatList
+            onViewableItemsChanged={viewableItemsChanged}
+            viewabilityConfig={{
+                itemVisiblePercentThreshold: 70
+            }}
+            contentInset={{x: 170} as any}
+
             horizontal
             data={posts}
             keyExtractor={(item) => item.$id.toString()}
