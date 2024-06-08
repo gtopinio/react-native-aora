@@ -1,38 +1,47 @@
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native'
 import { useState } from 'react'
 import React from 'react'
 import icons from '@/constants/icons'
+import { router, usePathname } from 'expo-router'
 
 interface SearchInputProps {
-    title: string,
-    value: string,
-    handleChangeText: (e: any) => void,
-    placeholder?: string,
-    otherStyles?: string,
-    keyboardType?: string,
+
 }
 
 const SearchInput = ({ 
-    title,
-    value,
-    placeholder,
-    handleChangeText, 
-    otherStyles, 
-    keyboardType
+
 }: SearchInputProps) => {
+    const pathName = usePathname();
+    const [query, setQuery] = useState('') // Just like the ngModel in Angular
+
+    const submitSearch = () => {
+        if (!query) {
+            return Alert.alert('Missing Query', 'Please enter something to search results across the database.');
+        }
+
+        if (pathName.startsWith('/search')) {
+            router.setParams({ query });
+        }
+        else {
+            router.push(`/search/${query}`);
+        }
+    }
 
     return (
             <View
                 className='w-full h-16 px-4 bg-black-100 border-2 border-black-200 rounded-2xl focus:border-secondary flex flex-row items-center space-x-4'
             >
                 <TextInput
+                    value={query}
                     className='text-base mt-0.5 text-white flex-1 font-pregular'
-                    value={value}
-                    placeholder={placeholder}
-                    placeholderTextColor='#7B7B8B'
-                    onChangeText={handleChangeText}
+                    placeholder={'Search for a video topic'}
+                    placeholderTextColor='#CDCDE0'
+                    onChangeText={(e) => setQuery(e)}
+                    onSubmitEditing={() => {submitSearch()}}
                 />
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {submitSearch()}}
+                >
                     <Image
                         source={icons.search}
                         className='w-5 h-5'

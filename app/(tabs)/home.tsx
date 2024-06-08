@@ -62,10 +62,6 @@ const Home = () => {
                             </View>
                         </View>
                         <SearchInput
-                            title=''
-                            value=''
-                            handleChangeText={() => {}}
-                            placeholder='Search for a video topic'
                         />
                         <View
                             // Latest videos section
