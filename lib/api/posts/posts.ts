@@ -34,3 +34,27 @@ export const getAllLatestPosts = async () => {
         throw new Error(String(error));
     }
 }
+
+export const searchPosts = async (query: string) => {
+    try {
+        if(!query) return [];
+
+        const searchPosts = await databases.listDocuments(
+            config.databaseId,
+            config.videoCollectionId,
+            [
+                Query.or(
+                    [
+                        Query.search('title', query),
+                        Query.search('prompt', query)
+                    ]
+                )
+            ]
+        );
+
+        return searchPosts.documents;
+    } catch (error) {
+        console.log("Get Specific Posts Error: ", error);
+        throw new Error(String(error));
+    }
+}

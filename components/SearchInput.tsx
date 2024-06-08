@@ -5,14 +5,14 @@ import icons from '@/constants/icons'
 import { router, usePathname } from 'expo-router'
 
 interface SearchInputProps {
-
+    initialQuery?: string
 }
 
 const SearchInput = ({ 
-
+    initialQuery
 }: SearchInputProps) => {
     const pathName = usePathname();
-    const [query, setQuery] = useState('') // Just like the ngModel in Angular
+    const [query, setQuery] = useState(initialQuery || '') // Just like the ngModel in Angular
 
     const submitSearch = () => {
         if (!query) {

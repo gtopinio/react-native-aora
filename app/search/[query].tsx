@@ -1,20 +1,90 @@
-import { View, Text } from 'react-native'
+import { View, Text, Image, FlatList, RefreshControl, ActivityIndicator } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Post } from '@/lib/interfaces/types';
+import { images } from '@/constants';
+import { searchPosts } from '@/lib/api/posts/posts';
+import queries from '@/lib/hooks/queries'
+import SearchInput from '@/components/SearchInput';
+import VideoCard from '@/components/VideoCard';
+import EmptyState from '@/components/EmptyState';
 
 const Search = () => {
     const { query } = useLocalSearchParams();
 
+    const [posts, setPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const fetchPosts = async () => {
+        setIsLoading(true);
+        const result = await searchPosts(query as string);
+        setPosts(result as any);
+        setIsLoading(false);
+    };
+
+    useEffect(() => {
+        fetchPosts();
+    }, [query]);
+
+
     return (
         <SafeAreaView
-            className='bg-primary h-full'
+            className="bg-primary h-full"
         >
-            <Text
-                className='text-white text-3xl'
-            >
-                {query}
-            </Text>
+            {
+                isLoading ? (
+                    <View
+                        className='flex-1 justify-center items-center'
+                    >
+                        <ActivityIndicator
+                            size='large'
+                            color='#FFA001'
+                        />
+                    </View>
+                    
+                ) : (
+                    <FlatList
+                        data={posts}
+                        keyExtractor={(item: Post) => item.$id.toString()}
+                        ListHeaderComponent={() => (
+                            <View
+                                className='my-6 px-4'
+                            >
+                                <Text
+                                    className='font-pmedium text-sm text-gray-100'
+                                >
+                                    Search results for
+                                </Text>
+                                <Text
+                                    className='text-2xl font-psemibold text-white'
+                                >
+                                    {query}
+                                </Text>
+    
+                                <View
+                                    className='mt-6 mb-8'
+                                >
+                                    <SearchInput
+                                        initialQuery={query as string}
+                                    />
+                                </View>
+                            </View>
+                        )}
+                        renderItem={({ item }) => (
+                            <VideoCard
+                                video={item}
+                            />
+                        )}
+                        ListEmptyComponent={() => (
+                            <EmptyState
+                                title='No Videos Found'
+                                subtitle='No videos were found for the search query.'
+                            />
+                        )}
+                    />
+                )
+            }
         </SafeAreaView>
     )
 }
