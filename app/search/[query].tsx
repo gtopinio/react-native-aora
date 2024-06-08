@@ -1,11 +1,9 @@
-import { View, Text, Image, FlatList, RefreshControl, ActivityIndicator } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Post } from '@/lib/interfaces/types';
-import { images } from '@/constants';
 import { searchPosts } from '@/lib/api/posts/posts';
-import queries from '@/lib/hooks/queries'
 import SearchInput from '@/components/SearchInput';
 import VideoCard from '@/components/VideoCard';
 import EmptyState from '@/components/EmptyState';
