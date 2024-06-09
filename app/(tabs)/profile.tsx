@@ -1,14 +1,14 @@
-import { View, Text, FlatList, ActivityIndicator, Touchable, TouchableOpacity, Image } from 'react-native'
-import { useLocalSearchParams } from 'expo-router'
+import { View, FlatList, ActivityIndicator, Touchable, TouchableOpacity, Image } from 'react-native'
+import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Post } from '@/lib/interfaces/types';
 import { getUserPosts, searchPosts } from '@/lib/api/posts/posts';
-import SearchInput from '@/components/SearchInput';
-import VideoCard from '@/components/VideoCard';
-import EmptyState from '@/components/EmptyState';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { icons } from '@/constants';
+import { signOut } from '@/lib/api/auth/auth';
+import VideoCard from '@/components/VideoCard';
+import EmptyState from '@/components/EmptyState';
 import InfoBox from '@/components/InfoBox';
 
 const Profile = () => {
@@ -25,9 +25,11 @@ const Profile = () => {
         setIsLoading(false);
     };
 
-    const logout = () => {
+    const logout = async () => {
+        await signOut();
         setUser(null);
         setIsLoggedIn(false);
+        router.push('/sign-in');
     };
 
     useEffect(() => {
