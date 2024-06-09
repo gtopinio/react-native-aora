@@ -80,7 +80,7 @@ const TrendingItems = ({
                     activeOpacity={0.7}
                     onPress={() => setPlay(true)}
                 >
-                    <ImageBackground
+                    <Image
                         source={{ uri: item.thumbnail }}
                         className='w-52 h-72 rounded-[35px] my-5 overflow-hidden shadow-lg shadow-black/40'
                         resizeMode='cover'

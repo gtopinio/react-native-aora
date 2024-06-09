@@ -14,6 +14,18 @@ const VideoCard = ({
     const [play, setPlay] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const handlePlaybackStatusUpdate = (status: any) => {
+        if (status.isPlaying) {
+            setPlay(true);
+            setLoading(false);
+        }
+        if (status.didJustFinish) {
+            setPlay(false);
+            setLoading(false);
+        }
+    };
+
+
     return (
         <View // Main view for (post details + creator + menu) and video thumbnail
             className='flex-col items-center px-4 mb-14'
@@ -62,28 +74,29 @@ const VideoCard = ({
             </View>
 
             {play ? (
-                loading ? (
-                    <ActivityIndicator
-                        size="large"
-                        color="#FFA001"
-                        className='w-full h-60 rounded-xl mt-3 bg-white/10'
+                <>
+                    <Video
+                        source={{ uri: video }}
+                        className='w-full h-60 rounded-xl'
+                        resizeMode={ResizeMode.CONTAIN}
+                        shouldPlay={play}
+                        useNativeControls
+                        onLoadStart={() => {
+                            setLoading(true);
+                        }}
+                        onLoad={() => {
+                            setLoading(false);
+                        }}
+                        onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
                     />
-                    ) : (
-                        <Video
-                            source={{ uri: video }}
-                            className='w-full h-60 rounded-xl'
-                            resizeMode={ResizeMode.CONTAIN}
-                            shouldPlay
-                            useNativeControls
-                            onLoadStart={() => setLoading(true)}
-                            onLoad={() => setLoading(false)}
-                            onPlaybackStatusUpdate={(status : any) => {
-                                if (status.didJustFinish) {
-                                    setPlay(false);
-                                }
-                            }}
+                    {loading && (
+                        <ActivityIndicator
+                                size="large"
+                                color="#FFA001"
+                                className='w-full h-60 rounded-xl mt-3 absolute justify-center items-center'
                         />
-                    )
+                    )}
+                </>
             ) : (
                 // Video Thumbnail to play instead of regular button
                 <TouchableOpacity
@@ -102,8 +115,7 @@ const VideoCard = ({
                         resizeMode='contain'
                     />
                 </TouchableOpacity>
-            )
-        }
+            )}
         </View>
     )
 }
