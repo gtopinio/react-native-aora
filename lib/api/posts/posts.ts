@@ -10,6 +10,9 @@ export const getAllPosts = async () => {
         const posts = await databases.listDocuments(
             config.databaseId,
             config.videoCollectionId,
+            [
+                Query.orderDesc('$createdAt')
+            ]
         );
 
         return posts.documents;
