@@ -22,9 +22,9 @@ export const getAllPosts = async () => {
     }
 }
 
-export const getAllLatestPosts = async () => {
+export const getAllTrendingPosts = async () => {
     try {
-        const latestPosts = await databases.listDocuments(
+        const trendingPosts = await databases.listDocuments(
             config.databaseId,
             config.videoCollectionId,
             [
@@ -33,9 +33,9 @@ export const getAllLatestPosts = async () => {
             ]
         );
 
-        return latestPosts.documents;
+        return trendingPosts.documents;
     } catch (error) {
-        console.log("Get All Latest Posts Error: ", error);
+        console.log("Get All Trending Posts Error: ", error);
         throw new Error(String(error));
     }
 }

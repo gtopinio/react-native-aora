@@ -2,7 +2,7 @@ import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState } from 'react'
 import { images } from '@/constants'
-import { getAllLatestPosts, getAllPosts } from '@/lib/api/posts/posts'
+import { getAllTrendingPosts, getAllPosts } from '@/lib/api/posts/posts'
 import { Post } from '@/lib/interfaces/types'
 import SearchInput from '@/components/SearchInput'
 import Trending from '@/components/Trending'
@@ -12,15 +12,16 @@ import VideoCard from '@/components/VideoCard'
 import { useGlobalContext } from '@/context/GlobalProvider'
 
 const Home = () => {
-    const { data: posts, refreshData } = queries(getAllPosts);
-    const { data: latestPosts } = queries(getAllLatestPosts);
+    const { data: posts, refreshData: refreshAllPosts } = queries(getAllPosts);
+    const { data: trendingPosts, refreshData: refreshTrendingPosts } = queries(getAllTrendingPosts);
     const { user } : any = useGlobalContext();
 
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = async () => {
         setRefreshing(true);
-        await refreshData();
+        await refreshAllPosts();
+        await refreshTrendingPosts();
         setRefreshing(false);
     }
 
@@ -75,7 +76,7 @@ const Home = () => {
                                 Latest Videos
                             </Text>
                             <Trending
-                                posts={latestPosts ?? []}
+                                posts={trendingPosts ?? []}
                             />
                         </View>
                     </View>
