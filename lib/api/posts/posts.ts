@@ -73,6 +73,7 @@ export const getUserPosts = async (userId: string) => {
             config.videoCollectionId,
             [
                 Query.equal('creator', userId),
+                Query.orderDesc('$createdAt'),
             ]
         );
 
