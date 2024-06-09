@@ -10,6 +10,7 @@ import EmptyState from '@/components/EmptyState'
 import queries from '@/lib/hooks/queries'
 import VideoCard from '@/components/VideoCard'
 import { useGlobalContext } from '@/context/GlobalProvider'
+import { useFocusEffect } from 'expo-router'
 
 const Home = () => {
     const { data: posts, refreshData: refreshAllPosts } = queries(getAllPosts);
@@ -24,6 +25,13 @@ const Home = () => {
         await refreshTrendingPosts();
         setRefreshing(false);
     }
+
+    useFocusEffect(
+        React.useCallback(() => {
+            refreshAllPosts();
+            refreshTrendingPosts();
+        }, [])
+    );
 
     return (
         <SafeAreaView
