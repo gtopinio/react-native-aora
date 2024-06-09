@@ -1,6 +1,6 @@
-import { View, FlatList, ActivityIndicator, Touchable, TouchableOpacity, Image } from 'react-native'
+import { View, FlatList, ActivityIndicator, TouchableOpacity, Image, RefreshControl } from 'react-native'
 import { router } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Post } from '@/lib/interfaces/types';
 import { getUserPosts, searchPosts } from '@/lib/api/posts/posts';
@@ -10,20 +10,19 @@ import { signOut } from '@/lib/api/auth/auth';
 import VideoCard from '@/components/VideoCard';
 import EmptyState from '@/components/EmptyState';
 import InfoBox from '@/components/InfoBox';
+import queries from '@/lib/hooks/queries';
 
 const Profile = () => {
     const { user, setUser, setIsLoggedIn } : any = useGlobalContext();
 
-    const [posts, setPosts] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const { data: userPosts, isLoading, refreshData } = queries(() => getUserPosts(user.$id));
+    const [refreshing, setRefreshing] = useState(false);
 
-    const fetchPosts = async () => {
-        console.log(user);
-        setIsLoading(true);
-        const result = await getUserPosts(user.$id);
-        setPosts(result as any);
-        setIsLoading(false);
-    };
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await refreshData();
+        setRefreshing(false);
+    }
 
     const logout = async () => {
         await signOut();
@@ -31,10 +30,6 @@ const Profile = () => {
         setIsLoggedIn(false);
         router.push('/sign-in');
     };
-
-    useEffect(() => {
-        fetchPosts();
-    }, []);
 
     return (
         <SafeAreaView
@@ -53,7 +48,7 @@ const Profile = () => {
                     
                 ) : (
                     <FlatList
-                        data={posts}
+                        data={userPosts}
                         keyExtractor={(item: Post) => item.$id.toString()}
                         ListHeaderComponent={() => (
                             <View
@@ -88,7 +83,7 @@ const Profile = () => {
                                     className='mt-5 flex-row'
                                 >
                                     <InfoBox
-                                        title={posts.length || 0}
+                                        title={userPosts.length || 0}
                                         subtitle='Posts'
                                         containerStyles='mr-10'
                                         titleStyles='text-xl'
@@ -112,6 +107,13 @@ const Profile = () => {
                                 subtitle='No videos were found for the current user.'
                             />
                         )}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                                progressBackgroundColor='#FFA001'
+                            />
+                        }
                     />
                 )
             }
