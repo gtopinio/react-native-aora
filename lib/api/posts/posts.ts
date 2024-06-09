@@ -58,3 +58,23 @@ export const searchPosts = async (query: string) => {
         throw new Error(String(error));
     }
 }
+
+export const getUserPosts = async (userId: string) => {
+    try {
+        console.log("User ID: ", userId);
+        if(!userId) return [];
+
+        const getUser = await databases.listDocuments(
+            config.databaseId,
+            config.videoCollectionId,
+            [
+                Query.equal('creator', userId),
+            ]
+        );
+
+        return getUser.documents;
+    } catch (error) {
+        console.log("Get User Posts Error: ", error);
+        throw new Error(String(error));
+    }
+}
