@@ -19,7 +19,7 @@ const zoomIn : any = {
         scale: 0.9
     },
     1:{
-        scale: 1.1
+        scale: 1.025
     },
 }
 
