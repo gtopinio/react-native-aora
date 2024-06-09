@@ -1,10 +1,16 @@
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FormField from '@/components/FormField'
 import { ResizeMode, Video } from 'expo-av'
 import { icons } from '@/constants'
 import CustomButton from '@/components/CustomButton'
+import * as DocumentPicker from 'expo-document-picker'
+import * as ImagePicker from 'expo-image-picker'
+import { router } from 'expo-router'
+import { createVideoPost } from '@/lib/api/posts/posts'
+import { useGlobalContext } from '@/context/GlobalProvider'
+import { PostForm } from '@/lib/interfaces/types'
 
 const Create = () => {
     const [form, setform] = useState({
@@ -12,12 +18,63 @@ const Create = () => {
         video: null as any,
         thumbnail: null as any,
         prompt: '',
-    });
+    } as PostForm);
+    const [uploading, setUploading] = useState(false);
+    const { user } : any = useGlobalContext();
 
-    const submit = () => {
+    const openPicker = async (selectType: 'video' | 'image') => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: selectType === 'image' ? ImagePicker.MediaTypeOptions.Images : ImagePicker.MediaTypeOptions.Videos,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            if (selectType === 'video') {
+                setform({ ...form, video: result.assets[0] });
+            }
+            if (selectType === 'image') {
+                setform({ ...form, thumbnail: result.assets[0] });
+            }
+        } else {
+            setTimeout(() => {
+                Alert.alert('Document Picked', JSON.stringify(result, null, 2)); // null means no replacer function, 2 means 2 spaces indentation
+            }, 100);
+        }
     }
 
-    const [uploading, setUploading] = useState(false);
+    const submit = async () => {
+        if (!form.prompt || !form.title || !form.video || !form.thumbnail) {
+            return Alert.alert('Error', 'Please fill in all fields');
+        }
+
+        setUploading(true);
+
+        try {
+            await createVideoPost(
+                { ...form },
+                user.$id,
+            );
+
+            Alert.alert('Success', 'Post uploaded successfully');
+            router.push('/home');
+            
+        } catch (error) {
+            const errorParsed = new Error(String(error));
+            console.log("Error uploading post: ", error);
+            Alert.alert('Error', errorParsed.message);
+            
+        } finally {
+            setform({
+                title: '',
+                video: null,
+                thumbnail: null,
+                prompt: '',
+            });
+
+            setUploading(false);
+        }
+    }
 
     return (
         <SafeAreaView
@@ -48,14 +105,14 @@ const Create = () => {
                     >
                         Upload Video
                     </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => openPicker('video')}
+                    >
                         {form.video ? ( 
                             <Video
                                 source={{ uri: form.video.uri }}
                                 className='w-full h-64 rounded-2xl'
-                                useNativeControls
                                 resizeMode={ResizeMode.COVER}
-                                isLooping
                             />
                         ) : (
                             <View
@@ -83,7 +140,9 @@ const Create = () => {
                     >
                         Thumbnail Image
                     </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => openPicker('image')}
+                    >
                         {form.thumbnail ? ( 
                             <Image
                                 source={{ uri: form.thumbnail.uri }}

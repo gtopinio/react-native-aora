@@ -13,7 +13,15 @@ interface Post {
     creator: Creator;
 }
 
+interface PostForm {
+    title: string, 
+    prompt: string, 
+    video: any, 
+    thumbnail: any,
+}
+
 export type { 
     Post,
-    Creator
+    Creator,
+    PostForm
 };
