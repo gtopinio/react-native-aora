@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity, ImageBackground, Image, ActivityIndicator } from 'react-native'
+import { FlatList, TouchableOpacity, ImageBackground, Image, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { Post } from '@/lib/interfaces/types'
 import * as Animatable from 'react-native-animatable'
@@ -40,6 +40,17 @@ const TrendingItems = ({
     const [play, setPlay] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const handlePlaybackStatusUpdate = (status: any) => {
+        if (status.isPlaying) {
+            setPlay(true);
+            setLoading(false);
+        }
+        if (status.didJustFinish) {
+            setPlay(false);
+            setLoading(false);
+        }
+    };
+
     return (
         <Animatable.View
             animation={activeItem === item.$id ? zoomIn : zoomOut}
@@ -47,28 +58,22 @@ const TrendingItems = ({
             className='mr-5'
         >
             {play ? (
-                loading ? (
-                <ActivityIndicator
-                    size="large"
-                    color="#FFA001"
+                <Video
+                    source={{ uri: item.video }}
                     className='w-52 h-72 rounded-[35px] mt-3 bg-white/10'
+                    resizeMode={ResizeMode.CONTAIN}
+                    shouldPlay={play}
+                    useNativeControls
+                    onLoadStart={() => {
+                        // This means the video is loading
+                        setLoading(true);
+                    }}
+                    onLoad={() => {
+                        // This means the video is ready to play
+                        setLoading(false);
+                    }}
+                    onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
                 />
-                ) : (
-                    <Video
-                        source={{ uri: item.video }}
-                        className='w-52 h-72 rounded-[35px] mt-3 bg-white/10'
-                        resizeMode={ResizeMode.CONTAIN}
-                        shouldPlay
-                        useNativeControls
-                        onLoadStart={() => setLoading(true)}
-                        onLoad={() => setLoading(false)}
-                        onPlaybackStatusUpdate={(status : any) => {
-                            if (status.didJustFinish) {
-                                setPlay(false);
-                            }
-                        }}
-                    />
-                )
             ) : (
                 <TouchableOpacity
                     className='relative justify-center items-center'
@@ -86,12 +91,17 @@ const TrendingItems = ({
                         resizeMode='contain'
                     />
                 </TouchableOpacity>
-            )
-            }
+            )}
+            {loading && (
+                <ActivityIndicator
+                    size="large"
+                    color="#FFA001"
+                    className='w-52 h-72 rounded-[35px] mt-3 bg-white/10 absolute'
+                />
+            )}
         </Animatable.View>
-    )
-}
-
+    );
+};
 const Trending = ({
     posts
 }: TrendingProps) => {
