@@ -42,8 +42,6 @@ const SignIn = () => {
                 throw new Error("Account not signed in");
             }
 
-            console.log("New User: ", result)
-
             // Apply Global Context
             setUser(result)
             setIsLoggedIn(true);

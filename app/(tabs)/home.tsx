@@ -1,6 +1,6 @@
 import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { images } from '@/constants'
 import { getAllLatestPosts, getAllPosts } from '@/lib/api/posts/posts'
 import { Post } from '@/lib/interfaces/types'
@@ -9,10 +9,12 @@ import Trending from '@/components/Trending'
 import EmptyState from '@/components/EmptyState'
 import queries from '@/lib/hooks/queries'
 import VideoCard from '@/components/VideoCard'
+import { useGlobalContext } from '@/context/GlobalProvider'
 
 const Home = () => {
     const { data: posts, refreshData } = queries(getAllPosts);
     const { data: latestPosts } = queries(getAllLatestPosts);
+    const { user } : any = useGlobalContext();
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -47,7 +49,7 @@ const Home = () => {
                                 <Text
                                     className='text-2xl font-psemibold text-white'
                                 >
-                                    Gtopinio
+                                    {user?.username ?? 'User'}
                                 </Text>
                             </View>
                             <View
