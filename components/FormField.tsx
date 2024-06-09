@@ -10,6 +10,7 @@ interface FormFieldProps {
     placeholder?: string,
     otherStyles?: string,
     keyboardType?: string,
+    handleSubmit?: () => void
 }
 
 const FormField = ({ 
@@ -18,7 +19,8 @@ const FormField = ({
     placeholder,
     handleChangeText, 
     otherStyles, 
-    keyboardType
+    keyboardType,
+    handleSubmit
 }: FormFieldProps) => {
     const [setshowPassword, setSetshowPassword] = useState(false)
 
@@ -41,6 +43,7 @@ const FormField = ({
                     placeholderTextColor='#7B7B8B'
                     onChangeText={handleChangeText}
                     secureTextEntry={title === 'Password' ? !setshowPassword : false} // Users want to hide their password (i.e., showPassword should be false). Thus, we use the NOT operator (!) since secureTextEntry is only triggered with true, which is only obtained when showPassword is false (!(false) = true)
+                    onSubmitEditing={handleSubmit}
                 />
                 {title === 'Password' && (
                     <TouchableOpacity

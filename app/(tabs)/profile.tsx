@@ -45,7 +45,6 @@ const Profile = () => {
                             color='#FFA001'
                         />
                     </View>
-                    
                 ) : (
                     <FlatList
                         data={userPosts}
