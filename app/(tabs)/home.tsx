@@ -1,6 +1,6 @@
 import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { images } from '@/constants'
 import { getAllTrendingPosts, getAllPosts } from '@/lib/api/posts/posts'
 import { Post } from '@/lib/interfaces/types'
@@ -18,6 +18,7 @@ const Home = () => {
     const { user } : any = useGlobalContext();
 
     const [refreshing, setRefreshing] = useState(false);
+    const [postData, setPostData] = useState(null);
 
     const onRefresh = async () => {
         setRefreshing(true);
@@ -25,6 +26,13 @@ const Home = () => {
         await refreshTrendingPosts();
         setRefreshing(false);
     }
+
+    useEffect(() => {
+        if (postData) {
+            refreshAllPosts();
+            refreshTrendingPosts();
+        }
+    }, [postData])
 
     useFocusEffect(
         React.useCallback(() => {
@@ -94,6 +102,7 @@ const Home = () => {
                     <VideoCard
                         video={item}
                         userId={user?.$id}
+                        handleUpdate={setPostData}
                     />
                 )}
                 ListEmptyComponent={() => (

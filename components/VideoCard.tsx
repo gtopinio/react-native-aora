@@ -8,11 +8,13 @@ import { toggleLikedPost } from '@/lib/api/posts/posts'
 interface VideoCardProps {
     video: Post,
     userId?: string
+    handleUpdate?: any
 }
 
 const VideoCard = ({ 
     video : { $id, title, thumbnail, prompt, video, creator: { username, avatar }, liked },
-    userId
+    userId,
+    handleUpdate
 } : VideoCardProps) => {
     const [play, setPlay] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -34,6 +36,8 @@ const VideoCard = ({
         try {
             setIsLikedLoading(true);
             await toggleLikedPost(postId, userId);
+            const random = Math.floor(Math.random() * 1000);
+            handleUpdate && handleUpdate('liked' + random);
         } catch (error) {
             const errorParsed = new Error(String(error));
             console.log("Error Liking Post: ", errorParsed);

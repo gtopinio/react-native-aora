@@ -1,8 +1,7 @@
 import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState } from 'react'
-import { images } from '@/constants'
-import { getAllSavedPosts, getAllPosts } from '@/lib/api/posts/posts'
+import React, { useEffect, useState } from 'react'
+import { getAllSavedPosts } from '@/lib/api/posts/posts'
 import { Post } from '@/lib/interfaces/types'
 import SearchInput from '@/components/SearchInput'
 import EmptyState from '@/components/EmptyState'
@@ -16,12 +15,19 @@ const Saved = () => {
     const { data: posts, refreshData: refreshAllSavedPosts } = queries(()=> getAllSavedPosts(user.$id));
 
     const [refreshing, setRefreshing] = useState(false);
+    const [postData, setPostData] = useState(null);
 
     const onRefresh = async () => {
         setRefreshing(true);
         await refreshAllSavedPosts();
         setRefreshing(false);
     }
+
+    useEffect(() => {
+        if (postData) {
+            refreshAllSavedPosts();
+        }
+    }, [postData])
 
     useFocusEffect(
         React.useCallback(() => {
@@ -58,6 +64,7 @@ const Saved = () => {
                     <VideoCard
                         video={item}
                         userId={user.$id}
+                        handleUpdate={setPostData}
                     />
                 )}
                 ListEmptyComponent={() => (
