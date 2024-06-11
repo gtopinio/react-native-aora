@@ -62,14 +62,23 @@ const VideoCard = ({
                         </Text>
                     </View>
                 </View>
-                <View // View for the menu
-                    className='pt-2'
+                <View // View for the menu and like button
+                    className='pt-2 flex-row space-x-4'
                 >
-                    <Image
-                        source={icons.menu}
-                        className='w-5 h-5'
-                        resizeMode='contain'
-                    />
+                    <TouchableOpacity>
+                        <Image
+                            source={icons.heart}
+                            className='w-5 h-5'
+                            resizeMode='contain'
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Image
+                            source={icons.menu}
+                            className='w-5 h-5'
+                            resizeMode='contain'
+                        />
+                    </TouchableOpacity>
                 </View>
             </View>
 
