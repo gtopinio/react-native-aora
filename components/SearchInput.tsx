@@ -6,10 +6,12 @@ import { router, usePathname } from 'expo-router'
 
 interface SearchInputProps {
     initialQuery?: string
+    placeholderText?: string
 }
 
 const SearchInput = ({ 
-    initialQuery
+    initialQuery,
+    placeholderText
 }: SearchInputProps) => {
     const pathName = usePathname();
     const [query, setQuery] = useState(initialQuery || '') // Just like the ngModel in Angular
@@ -34,7 +36,7 @@ const SearchInput = ({
                 <TextInput
                     value={query}
                     className='text-base mt-0.5 text-white flex-1 font-pregular'
-                    placeholder={'Search for a video topic'}
+                    placeholder={placeholderText}
                     placeholderTextColor='#CDCDE0'
                     onChangeText={(e) => setQuery(e)}
                     onSubmitEditing={() => {submitSearch()}}

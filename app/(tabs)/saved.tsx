@@ -2,19 +2,17 @@ import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState } from 'react'
 import { images } from '@/constants'
-import { getAllTrendingPosts, getAllPosts } from '@/lib/api/posts/posts'
+import { getAllPosts } from '@/lib/api/posts/posts'
 import { Post } from '@/lib/interfaces/types'
 import SearchInput from '@/components/SearchInput'
-import Trending from '@/components/Trending'
 import EmptyState from '@/components/EmptyState'
 import queries from '@/lib/hooks/queries'
 import VideoCard from '@/components/VideoCard'
 import { useGlobalContext } from '@/context/GlobalProvider'
 import { useFocusEffect } from 'expo-router'
 
-const Home = () => {
+const Saved = () => {
     const { data: posts, refreshData: refreshAllPosts } = queries(getAllPosts);
-    const { data: trendingPosts, refreshData: refreshTrendingPosts } = queries(getAllTrendingPosts);
     const { user } : any = useGlobalContext();
 
     const [refreshing, setRefreshing] = useState(false);
@@ -22,14 +20,12 @@ const Home = () => {
     const onRefresh = async () => {
         setRefreshing(true);
         await refreshAllPosts();
-        await refreshTrendingPosts();
         setRefreshing(false);
     }
 
     useFocusEffect(
         React.useCallback(() => {
             refreshAllPosts();
-            refreshTrendingPosts();
         }, [])
     );
 
@@ -42,52 +38,20 @@ const Home = () => {
                 keyExtractor={(item: Post) => item.$id.toString()}
                 ListHeaderComponent={() => (
                     <View
-                        className='my-6 px-4 space-y-6'
+                        className='my-10 px-4 space-y-6'
                     >
                         <View
-                            className='justify-between items-start flex-row mb-6'
-                        >
-                            <View
-                                // Left Child
-                            >
-                                <Text
-                                    className='font-pmedium text-sm text-gray-100'
-                                >
-                                    Welcome Back
-                                </Text>
-                                <Text
-                                    className='text-2xl font-psemibold text-white'
-                                >
-                                    {user?.username ?? 'User'}
-                                </Text>
-                            </View>
-                            <View
-                                // Right Child
-                                className='mt-1.5'
-                            >
-                                <Image
-                                source={images.logoSmall}
-                                className='w-9 h-10'
-                                resizeMode='contain'
-                                />
-                            </View>
-                        </View>
-                        <SearchInput
-                            placeholderText='Search for a video topic'
-                        />
-                        <View
-                            // Latest videos section
-                            className='w-full flex-1 pt-5 pb-8'
+                            className='flex-row mb-6'
                         >
                             <Text
-                                className='text-gray-100 text-lg font-pregular mb-3'
+                                className='text-2xl font-psemibold text-white'
                             >
-                                Latest Videos
+                                Saved Videos
                             </Text>
-                            <Trending
-                                posts={trendingPosts ?? []}
-                            />
                         </View>
+                        <SearchInput
+                            placeholderText='Search for your saved videos'
+                        />
                     </View>
                 )}
                 renderItem={({ item }) => (
@@ -113,4 +77,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default Saved

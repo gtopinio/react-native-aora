@@ -6,7 +6,7 @@ import { icons } from '@/constants'
 const tabs = [
     { name: 'home', title: 'Home', icon: icons.home },
     { name: 'create', title: 'Create', icon: icons.plus },
-    { name: 'bookmark', title: 'Bookmark', icon: icons.bookmark },
+    { name: 'saved', title: 'Saved', icon: icons.bookmark },
     { name: 'profile', title: 'Profile', icon: icons.profile },
 ]
 
