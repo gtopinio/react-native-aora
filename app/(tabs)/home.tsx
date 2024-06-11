@@ -93,6 +93,7 @@ const Home = () => {
                 renderItem={({ item }) => (
                     <VideoCard
                         video={item}
+                        userId={user?.$id}
                     />
                 )}
                 ListEmptyComponent={() => (

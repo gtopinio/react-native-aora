@@ -57,6 +57,7 @@ const Saved = () => {
                 renderItem={({ item }) => (
                     <VideoCard
                         video={item}
+                        userId={user.$id}
                     />
                 )}
                 ListEmptyComponent={() => (

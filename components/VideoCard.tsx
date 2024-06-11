@@ -5,11 +5,13 @@ import { icons } from '@/constants'
 import { ResizeMode, Video } from 'expo-av'
 
 interface VideoCardProps {
-    video: Post
+    video: Post,
+    userId?: string
 }
 
 const VideoCard = ({ 
-    video : { title, thumbnail, prompt, video, creator: { username, avatar } }
+    video : { title, thumbnail, prompt, video, creator: { username, avatar }, liked },
+    userId
 } : VideoCardProps) => {
     const [play, setPlay] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -66,11 +68,21 @@ const VideoCard = ({
                     className='pt-2 flex-row space-x-4'
                 >
                     <TouchableOpacity>
-                        <Image
-                            source={icons.heart}
-                            className='w-5 h-5'
-                            resizeMode='contain'
-                        />
+                        {
+                            liked.includes(userId as any) ? (
+                                <Image
+                                    source={icons.heartFilled}
+                                    className='w-5 h-5'
+                                    resizeMode='contain'
+                                />
+                            ) : (
+                                <Image
+                                    source={icons.heart}
+                                    className='w-5 h-5'
+                                    resizeMode='contain'
+                                />
+                            )
+                        }
                     </TouchableOpacity>
                     <TouchableOpacity>
                         <Image
