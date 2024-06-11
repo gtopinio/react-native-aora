@@ -1,12 +1,12 @@
 import React from 'react'
 import TabIcon from '@/components/TabIcon'
-import { Tabs, Redirect } from 'expo-router'
+import { Tabs } from 'expo-router'
 import { icons } from '@/constants'
 
 const tabs = [
     { name: 'home', title: 'Home', icon: icons.home },
-    { name: 'bookmark', title: 'Bookmark', icon: icons.bookmark },
     { name: 'create', title: 'Create', icon: icons.plus },
+    { name: 'bookmark', title: 'Bookmark', icon: icons.bookmark },
     { name: 'profile', title: 'Profile', icon: icons.profile },
 ]
 

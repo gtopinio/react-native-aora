@@ -1,4 +1,4 @@
-import { View, FlatList, ActivityIndicator, TouchableOpacity, Image, RefreshControl } from 'react-native'
+import { View, FlatList, ActivityIndicator, TouchableOpacity, Image, RefreshControl, Text } from 'react-native'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -53,16 +53,25 @@ const Profile = () => {
                             <View
                                 className='w-full justify-center items-center mt-6 mb-12 px-4'
                             >
-                                <TouchableOpacity
-                                    className='w-full items-end mb-10'
-                                    onPress={logout}
+                                <View 
+                                    className="w-full flex-row justify-between items-center"
                                 >
+                                    <Text 
+                                        className="text-2xl font-psemibold text-white"
+                                    >
+                                        Profile
+                                    </Text>
+                                    <TouchableOpacity 
+                                        onPress={logout} 
+                                        className="w-10 h-10 px-6 bg-gray-900 rounded-lg justify-center items-center shadow-lg"
+                                    >
                                     <Image
                                         source={icons.logout}
-                                        resizeMode='contain'
-                                        className='w-6 h-6'
+                                        resizeMode="contain"
+                                        className="w-6 h-6"
                                     />
-                                </TouchableOpacity>
+                                    </TouchableOpacity>
+                                </View>
                                 <View
                                     className='w-16 h-16 border border-secondary rounded-lg justify-center items-center'
                                 >
