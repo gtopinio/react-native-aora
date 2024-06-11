@@ -1,8 +1,9 @@
-import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { Post } from '@/lib/interfaces/types'
 import { icons } from '@/constants'
 import { ResizeMode, Video } from 'expo-av'
+import { toggleLikedPost } from '@/lib/api/posts/posts'
 
 interface VideoCardProps {
     video: Post,
@@ -10,11 +11,12 @@ interface VideoCardProps {
 }
 
 const VideoCard = ({ 
-    video : { title, thumbnail, prompt, video, creator: { username, avatar }, liked },
+    video : { $id, title, thumbnail, prompt, video, creator: { username, avatar }, liked },
     userId
 } : VideoCardProps) => {
     const [play, setPlay] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isLikedLoading, setIsLikedLoading] = useState(false);
 
     const handlePlaybackStatusUpdate = (status: any) => {
         if (status.isPlaying) {
@@ -27,6 +29,19 @@ const VideoCard = ({
         }
     };
 
+    const handleLikePost = async (postId: string, userId: string) => {
+        if (isLikedLoading) return;
+        try {
+            setIsLikedLoading(true);
+            await toggleLikedPost(postId, userId);
+        } catch (error) {
+            const errorParsed = new Error(String(error));
+            console.log("Error Liking Post: ", errorParsed);
+            Alert.alert("Error", errorParsed.message);
+        } finally {
+            setIsLikedLoading(false);
+        }
+    }
 
     return (
         <View // Main view for (post details + creator + menu) and video thumbnail
@@ -67,20 +82,31 @@ const VideoCard = ({
                 <View // View for the menu and like button
                     className='pt-2 flex-row space-x-4'
                 >
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => handleLikePost($id, userId as string)}
+                    >
                         {
-                            liked.includes(userId as any) ? (
-                                <Image
-                                    source={icons.heartFilled}
+                            isLikedLoading ? (
+                                <ActivityIndicator
+                                    size="small"
+                                    color="#FF9C01"
                                     className='w-5 h-5'
-                                    resizeMode='contain'
-                                />
+                                >
+                                </ActivityIndicator>
                             ) : (
-                                <Image
-                                    source={icons.heart}
-                                    className='w-5 h-5'
-                                    resizeMode='contain'
-                                />
+                                liked.includes(userId as any) ? (
+                                    <Image
+                                        source={icons.heartFilled}
+                                        className='w-5 h-5'
+                                        resizeMode='contain'
+                                    />
+                                ) : (
+                                    <Image
+                                        source={icons.heart}
+                                        className='w-5 h-5'
+                                        resizeMode='contain'
+                                    />
+                                )
                             )
                         }
                     </TouchableOpacity>

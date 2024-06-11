@@ -40,14 +40,14 @@ export const getAllTrendingPosts = async () => {
     }
 }
 
-export const getAllSavedPosts = async (userID: string) => {
+export const getAllSavedPosts = async (userId: string) => {
     try {
         const posts = await databases.listDocuments(
             config.databaseId,
             config.videoCollectionId,
             [
                 Query.orderDesc('$createdAt'),
-                Query.contains('liked', userID)
+                Query.contains('liked', userId)
             ]
         );
 
@@ -186,6 +186,35 @@ export const createVideoPost = async (
         return newPost;
     } catch (error) {
         console.log("Create Video Post Error: ", error);
+        throw new Error(String(error));
+    }
+}
+
+export const toggleLikedPost = async (postId: string, userId: string) => {
+    try {
+        const post = await databases.getDocument(
+            config.databaseId,
+            config.videoCollectionId,
+            postId
+        );
+
+        let updatedLiked;
+        if (post.liked.includes(userId)) {
+            updatedLiked = post.liked.filter((id: string) => id !== userId);
+        } else {
+            updatedLiked = [...post.liked, userId];
+        }
+
+        await databases.updateDocument(
+            config.databaseId,
+            config.videoCollectionId,
+            postId,
+            { liked: updatedLiked }
+        );
+
+        return { ...post, liked: updatedLiked };
+    } catch (error) {
+        console.log("Toggle Liked Post Error: ", error);
         throw new Error(String(error));
     }
 }
