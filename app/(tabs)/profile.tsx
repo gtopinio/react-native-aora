@@ -1,6 +1,6 @@
 import { View, FlatList, ActivityIndicator, TouchableOpacity, Image, RefreshControl, Text } from 'react-native'
-import { router } from 'expo-router'
-import React, { useState } from 'react'
+import { router, useFocusEffect } from 'expo-router'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Post } from '@/lib/interfaces/types';
 import { getUserPosts, searchPosts } from '@/lib/api/posts/posts';
@@ -17,6 +17,7 @@ const Profile = () => {
 
     const { data: userPosts, isLoading, refreshData } = queries(() => getUserPosts(user.$id));
     const [refreshing, setRefreshing] = useState(false);
+    const [postData, setPostData] = useState(null);
 
     const onRefresh = async () => {
         setRefreshing(true);
@@ -30,6 +31,18 @@ const Profile = () => {
         setIsLoggedIn(false);
         router.push('/sign-in');
     };
+
+    useEffect(() => {
+        if (postData) {
+            refreshData();
+        }
+    }, [postData]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            refreshData();
+        }, [])
+    );
 
     return (
         <SafeAreaView
@@ -107,6 +120,8 @@ const Profile = () => {
                         renderItem={({ item }) => (
                             <VideoCard
                                 video={item}
+                                userId={user?.$id}
+                                handleUpdate={setPostData}
                             />
                         )}
                         ListEmptyComponent={() => (
