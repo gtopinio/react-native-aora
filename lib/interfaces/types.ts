@@ -11,6 +11,7 @@ interface Post {
     prompt: string;
     video: string;
     creator: Creator;
+    liked: string[];
 }
 
 interface PostForm {

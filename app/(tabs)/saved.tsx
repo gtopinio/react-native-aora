@@ -2,7 +2,7 @@ import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState } from 'react'
 import { images } from '@/constants'
-import { getAllPosts } from '@/lib/api/posts/posts'
+import { getAllSavedPosts, getAllPosts } from '@/lib/api/posts/posts'
 import { Post } from '@/lib/interfaces/types'
 import SearchInput from '@/components/SearchInput'
 import EmptyState from '@/components/EmptyState'
@@ -12,20 +12,20 @@ import { useGlobalContext } from '@/context/GlobalProvider'
 import { useFocusEffect } from 'expo-router'
 
 const Saved = () => {
-    const { data: posts, refreshData: refreshAllPosts } = queries(getAllPosts);
     const { user } : any = useGlobalContext();
+    const { data: posts, refreshData: refreshAllSavedPosts } = queries(()=> getAllSavedPosts(user.$id));
 
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = async () => {
         setRefreshing(true);
-        await refreshAllPosts();
+        await refreshAllSavedPosts();
         setRefreshing(false);
     }
 
     useFocusEffect(
         React.useCallback(() => {
-            refreshAllPosts();
+            refreshAllSavedPosts();
         }, [])
     );
 

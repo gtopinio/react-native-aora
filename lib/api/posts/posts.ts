@@ -40,6 +40,24 @@ export const getAllTrendingPosts = async () => {
     }
 }
 
+export const getAllSavedPosts = async (userID: string) => {
+    try {
+        const posts = await databases.listDocuments(
+            config.databaseId,
+            config.videoCollectionId,
+            [
+                Query.orderDesc('$createdAt'),
+                Query.contains('liked', userID)
+            ]
+        );
+
+        return posts.documents;
+    } catch (error) {
+        console.log("Get All Liked Posts Error: ", error);
+        throw new Error(String(error));
+    }
+}
+
 export const searchPosts = async (query: string) => {
     try {
         if(!query) return [];
