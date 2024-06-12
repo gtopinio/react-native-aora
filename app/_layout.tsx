@@ -59,6 +59,12 @@ const RootLayout = () => {
             headerShown: false,
           }} 
         />
+        <Stack.Screen 
+          name="edit/[post]"
+          options={{
+            headerShown: false,
+          }} 
+        />
       </Stack>
     </GlobalProvider>
   )

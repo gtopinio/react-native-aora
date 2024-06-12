@@ -4,6 +4,7 @@ import { Post } from '@/lib/interfaces/types'
 import { icons } from '@/constants'
 import { ResizeMode, Video } from 'expo-av'
 import { toggleLikedPost } from '@/lib/api/services/posts'
+import { router, usePathname } from 'expo-router'
 
 interface VideoCardProps {
     video: Post,
@@ -16,6 +17,7 @@ const VideoCard = ({
     userId,
     handleUpdate
 } : VideoCardProps) => {
+    const pathName = usePathname();
     const [play, setPlay] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isLikedLoading, setIsLikedLoading] = useState(false);
@@ -55,6 +57,30 @@ const VideoCard = ({
             setMenuCoordinates({ x: px, y: py });
             setModalVisible(true);
         });
+    };
+
+    const handleEditPost = () => {
+        if (!video) {
+            return Alert.alert('Missing Post Fields', 'Please refresh the page and try again');
+        }
+
+        const params = {
+            title,
+            prompt,
+            thumbnail,
+            video,
+            $id,
+        };
+
+        if (!pathName.startsWith('/edit')) { // We're in home apparently
+            console.log("Params: ", params);
+
+            const path = `/edit/${$id}?title=${encodeURIComponent(title)}&prompt=${encodeURIComponent(prompt)}&thumbnail=${encodeURIComponent(thumbnail)}&video=${encodeURIComponent(video)}`;
+            router.push(path);
+        } else { // Else if we're already in the edit page
+            console.log("Params: ", params);
+            router.setParams(params);
+        }
     };
 
     return (
@@ -142,10 +168,6 @@ const VideoCard = ({
                         visible={modalVisible}
                         animationType="fade"
                         transparent={true}
-                        onRequestClose={() => {
-                            Alert.alert("Modal has been closed.");
-                            setModalVisible(!modalVisible);
-                        }}
                         >
                             <TouchableWithoutFeedback onPress={() => setModalVisible(!modalVisible)}>
                                 <View className="flex justify-center items-end h-full">
@@ -163,7 +185,7 @@ const VideoCard = ({
                                                 >
                                                     <TouchableOpacity
                                                         className='w-28 h-10 bg-gray-100 rounded-lg justify-center items-center'
-                                                        onPress={() => setModalVisible(!modalVisible)}
+                                                        onPress={handleEditPost}
                                                     >
                                                         <Text
                                                             className='text-black-100 font-psemibold text-sm'

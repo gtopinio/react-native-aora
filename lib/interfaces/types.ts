@@ -15,10 +15,11 @@ interface Post {
 }
 
 interface PostForm {
+    $id?: string,
     title: string, 
     prompt: string, 
     video: any, 
-    thumbnail: any,
+    thumbnail: any
 }
 
 export type { 

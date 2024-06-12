@@ -218,6 +218,50 @@ export const createVideoPost = async (
     }
 }
 
+export const editVideoPost = async (
+    form: PostForm,
+    creatorId: string
+) => {
+    try {
+        let updatedPost;
+        if (form.video && form.thumbnail) {
+            const [thumbnailUrl, videoUrl] = await Promise.all([
+                uploadFile(form.thumbnail, 'image'),
+                uploadFile(form.video, 'video'),
+            ]);
+    
+            updatedPost = await databases.updateDocument(
+                config.databaseId,
+                config.videoCollectionId,
+                form.$id as string,
+                {
+                    title: form.title,
+                    prompt: form.prompt,
+                    video: videoUrl,
+                    thumbnail: thumbnailUrl,
+                    creator: creatorId
+                }
+            );
+        } else {
+            updatedPost = await databases.updateDocument(
+                config.databaseId,
+                config.videoCollectionId,
+                form.$id as string,
+                {
+                    title: form.title,
+                    prompt: form.prompt,
+                    creator: creatorId
+                }
+            );
+        }
+
+        return updatedPost;
+    } catch (error) {
+        console.log("Edit Video Post Error: ", error);
+        throw new Error(String(error));
+    }
+}
+
 export const toggleLikedPost = async (postId: string, userId: string) => {
     try {
         const post = await databases.getDocument(
