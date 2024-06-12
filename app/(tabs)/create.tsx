@@ -8,7 +8,7 @@ import CustomButton from '@/components/CustomButton'
 import * as DocumentPicker from 'expo-document-picker'
 import * as ImagePicker from 'expo-image-picker'
 import { router } from 'expo-router'
-import { createVideoPost } from '@/lib/api/posts/posts'
+import { createVideoPost } from '@/lib/api/services/posts'
 import { useGlobalContext } from '@/context/GlobalProvider'
 import { PostForm } from '@/lib/interfaces/types'
 

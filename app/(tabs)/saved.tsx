@@ -1,7 +1,7 @@
 import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect, useState } from 'react'
-import { getAllSavedPosts } from '@/lib/api/posts/posts'
+import { getAllSavedPosts } from '@/lib/api/services/posts'
 import { Post } from '@/lib/interfaces/types'
 import SearchInput from '@/components/SearchInput'
 import EmptyState from '@/components/EmptyState'

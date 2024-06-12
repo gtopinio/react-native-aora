@@ -3,7 +3,7 @@ import { useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Post } from '@/lib/interfaces/types';
-import { searchPosts } from '@/lib/api/posts/posts';
+import { searchPosts } from '@/lib/api/services/posts';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import SearchInput from '@/components/SearchInput';
 import VideoCard from '@/components/VideoCard';

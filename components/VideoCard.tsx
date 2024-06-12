@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react'
 import { Post } from '@/lib/interfaces/types'
 import { icons } from '@/constants'
 import { ResizeMode, Video } from 'expo-av'
-import { toggleLikedPost } from '@/lib/api/posts/posts'
+import { toggleLikedPost } from '@/lib/api/services/posts'
 
 interface VideoCardProps {
     video: Post,
