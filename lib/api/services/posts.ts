@@ -290,3 +290,43 @@ export const toggleLikedPost = async (postId: string, userId: string) => {
         throw new Error(String(error));
     }
 }
+
+export const deletePost = async (postId: string) => {
+    try {
+        const postDocument = await databases.getDocument(
+            config.databaseId,
+            config.videoCollectionId,
+            postId
+        );
+
+        const thumbnailUrl = postDocument.thumbnail;
+        const videoUrl = postDocument.video;
+
+        const extractFileId = (url: string) => {
+            const matches = url.match(/files\/(.*?)\//);
+            return matches ? matches[1] : null;
+        };
+
+        const thumbnailFileId = extractFileId(thumbnailUrl);
+        const videoFileId = extractFileId(videoUrl);
+
+        if (thumbnailFileId) {
+            await storage.deleteFile(config.storageId, thumbnailFileId);
+        }
+
+        if (videoFileId) {
+            await storage.deleteFile(config.storageId, videoFileId);
+        }
+
+        await databases.deleteDocument(
+            config.databaseId,
+            config.videoCollectionId,
+            postId
+        );
+
+        return;
+    } catch (error) {
+        console.log("Delete Post Error: ", error);
+        throw new Error(String(error));
+    }
+}
