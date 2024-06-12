@@ -57,6 +57,7 @@ const Saved = () => {
                         </View>
                         <SearchInput
                             placeholderText='Search for your saved videos'
+                            userId={user.$id}
                         />
                     </View>
                 )}

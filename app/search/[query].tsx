@@ -3,22 +3,22 @@ import { useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Post } from '@/lib/interfaces/types';
-import { searchPosts } from '@/lib/api/services/posts';
 import { useGlobalContext } from '@/context/GlobalProvider';
+import { searchPosts, getUserSavedPosts } from '@/lib/api/services/posts';
 import SearchInput from '@/components/SearchInput';
 import VideoCard from '@/components/VideoCard';
 import EmptyState from '@/components/EmptyState';
 
 const Search = () => {
     const { user } : any = useGlobalContext();
-    const { query } = useLocalSearchParams();
+    const { query, userId } = useLocalSearchParams();
     const [posts, setPosts] = useState([]);
     const [postData, setPostData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchPosts = async () => {
         setIsLoading(true);
-        const result = await searchPosts(query as string);
+        const result = userId ? await getUserSavedPosts(userId as string, query as string) : await searchPosts(query as string);
         setPosts(result as any);
         setIsLoading(false);
     };

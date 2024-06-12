@@ -7,11 +7,13 @@ import { router, usePathname } from 'expo-router'
 interface SearchInputProps {
     initialQuery?: string
     placeholderText?: string
+    userId?: string
 }
 
 const SearchInput = ({ 
     initialQuery,
-    placeholderText
+    placeholderText,
+    userId
 }: SearchInputProps) => {
     const pathName = usePathname();
     const [query, setQuery] = useState(initialQuery || '') // Just like the ngModel in Angular
@@ -21,11 +23,14 @@ const SearchInput = ({
             return Alert.alert('Missing Query', 'Please enter something to search results across the database.');
         }
 
+        const params = userId ? { query, userId } : { query };
+
         if (pathName.startsWith('/search')) {
-            router.setParams({ query });
+            router.setParams(params);
         }
         else {
-            router.push(`/search/${query}`);
+            const path = userId ? `/search/${query}?userId=${userId}` : `/search/${query}`; // userId + query = saved posts
+            router.push(path);
         }
     }
 

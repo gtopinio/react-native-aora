@@ -102,6 +102,34 @@ export const getUserPosts = async (userId: string) => {
     }
 }
 
+export const getUserSavedPosts = async (userId: string, query: string) => {
+    try {
+        if(!userId) return [];
+
+        const getUser = await databases.listDocuments(
+            config.databaseId,
+            config.videoCollectionId,
+            [
+                Query.and([
+                    Query.or(
+                        [
+                            Query.search('title', query),
+                            Query.search('prompt', query)
+                        ]
+                    ),
+                    Query.contains('liked', userId),
+                ]),
+                Query.orderDesc('$createdAt'),
+            ]
+        );
+
+        return getUser.documents;
+    } catch (error) {
+        console.log("Get User Saved Posts Error: ", error);
+        throw new Error(String(error));
+    }
+}
+
 export const getFilePreview = async (fileId: string, type: string) => {
     let fileUrl;
 
