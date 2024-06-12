@@ -4,14 +4,16 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Post } from '@/lib/interfaces/types';
 import { searchPosts } from '@/lib/api/posts/posts';
+import { useGlobalContext } from '@/context/GlobalProvider';
 import SearchInput from '@/components/SearchInput';
 import VideoCard from '@/components/VideoCard';
 import EmptyState from '@/components/EmptyState';
 
 const Search = () => {
+    const { user } : any = useGlobalContext();
     const { query } = useLocalSearchParams();
-
     const [posts, setPosts] = useState([]);
+    const [postData, setPostData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchPosts = async () => {
@@ -23,7 +25,7 @@ const Search = () => {
 
     useEffect(() => {
         fetchPosts();
-    }, [query]);
+    }, [query, postData]);
 
 
     return (
@@ -72,12 +74,16 @@ const Search = () => {
                         renderItem={({ item }) => (
                             <VideoCard
                                 video={item}
+                                userId={user?.$id}
+                                handleUpdate={setPostData}
                             />
                         )}
                         ListEmptyComponent={() => (
                             <EmptyState
                                 title='No Videos Found'
                                 subtitle='No videos were found for the search query.'
+                                buttonTitle='Go to Home'
+                                reroute='/home'
                             />
                         )}
                     />
