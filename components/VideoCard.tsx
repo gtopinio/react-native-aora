@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, Image, TouchableOpacity, ActivityIndicator, Alert, Modal, TouchableWithoutFeedback } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { Post } from '@/lib/interfaces/types'
 import { icons } from '@/constants'
 import { ResizeMode, Video } from 'expo-av'
@@ -19,6 +19,9 @@ const VideoCard = ({
     const [play, setPlay] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isLikedLoading, setIsLikedLoading] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [menuCoordinates, setMenuCoordinates] = useState({ x: 0, y: 0 });
+    const menuIconRef = useRef(null as any);
 
     const handlePlaybackStatusUpdate = (status: any) => {
         if (status.isPlaying) {
@@ -46,6 +49,13 @@ const VideoCard = ({
             setIsLikedLoading(false);
         }
     }
+
+    const handleMenuClick = () => {
+        menuIconRef.current.measure((fx: any, fy: any, width: any, height: any, px: any, py: any) => {
+            setMenuCoordinates({ x: px, y: py });
+            setModalVisible(true);
+        });
+    };
 
     return (
         <View // Main view for (post details + creator + menu) and video thumbnail
@@ -114,13 +124,65 @@ const VideoCard = ({
                             )
                         }
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    ref={menuIconRef}
+                    onPress={handleMenuClick}
+                    >
                         <Image
                             source={icons.menu}
                             className='w-5 h-5'
                             resizeMode='contain'
                         />
                     </TouchableOpacity>
+                    <Modal
+                        visible={modalVisible}
+                        animationType="fade"
+                        transparent={true}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setModalVisible(!modalVisible);
+                        }}
+                        >
+                            <TouchableWithoutFeedback onPress={() => setModalVisible(!modalVisible)}>
+                                <View className="flex justify-center items-end h-full">
+                                    <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+                                        <View
+                                            style={{
+                                                position: "absolute",
+                                                left: menuCoordinates.x - 125,
+                                                top: menuCoordinates.y,
+                                            }}
+                                            className="bg-black-100 w-36 h-40 rounded-lg justify-center items-center"
+                                        >
+                                        <View 
+                                                    className='flex-col space-y-4'
+                                                >
+                                                    <TouchableOpacity
+                                                        className='w-28 h-10 bg-gray-100 rounded-lg justify-center items-center'
+                                                        onPress={() => setModalVisible(!modalVisible)}
+                                                    >
+                                                        <Text
+                                                            className='text-black-100 font-psemibold text-sm'
+                                                        >
+                                                            Edit Post
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        className='w-28 h-10  bg-gray-100 rounded-lg justify-center items-center'
+                                                        onPress={() => setModalVisible(!modalVisible)}
+                                                    >
+                                                        <Text
+                                                            className='text-black-100 font-psemibold text-sm'
+                                                        >
+                                                            Delete Post
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </Modal>
                 </View>
             </View>
 
