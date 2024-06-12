@@ -104,20 +104,20 @@ const VideoCard = ({
                                 <ActivityIndicator
                                     size="small"
                                     color="#FF9C01"
-                                    className='w-5 h-5'
+                                    className='w-6 h-6'
                                 >
                                 </ActivityIndicator>
                             ) : (
                                 liked.includes(userId as any) ? (
                                     <Image
                                         source={icons.heartFilled}
-                                        className='w-5 h-5'
+                                        className='w-6 h-6'
                                         resizeMode='contain'
                                     />
                                 ) : (
                                     <Image
                                         source={icons.heart}
-                                        className='w-5 h-5'
+                                        className='w-6 h-6'
                                         resizeMode='contain'
                                     />
                                 )
@@ -130,7 +130,7 @@ const VideoCard = ({
                     >
                         <Image
                             source={icons.menu}
-                            className='w-5 h-5'
+                            className='w-6 h-6'
                             resizeMode='contain'
                         />
                     </TouchableOpacity>
