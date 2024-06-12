@@ -12,7 +12,7 @@ interface VideoCardProps {
 }
 
 const VideoCard = ({ 
-    video : { $id, title, thumbnail, prompt, video, creator: { username, avatar }, liked },
+    video : { $id, title, thumbnail, prompt, video, creator: { $id: creatorId, username, avatar }, liked },
     userId,
     handleUpdate
 } : VideoCardProps) => {
@@ -124,16 +124,20 @@ const VideoCard = ({
                             )
                         }
                     </TouchableOpacity>
-                    <TouchableOpacity
-                    ref={menuIconRef}
-                    onPress={handleMenuClick}
-                    >
-                        <Image
-                            source={icons.menu}
-                            className='w-6 h-6'
-                            resizeMode='contain'
-                        />
-                    </TouchableOpacity>
+                    {
+                        userId === creatorId && (
+                            <TouchableOpacity
+                                onPress={handleMenuClick}
+                                ref={menuIconRef}
+                            >
+                                <Image
+                                    source={icons.menu}
+                                    className='w-6 h-6'
+                                    resizeMode='contain'
+                                />
+                            </TouchableOpacity>
+                        )
+                    }
                     <Modal
                         visible={modalVisible}
                         animationType="fade"

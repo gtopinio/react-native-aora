@@ -128,6 +128,8 @@ const Profile = () => {
                             <EmptyState
                                 title='No Videos Found'
                                 subtitle='No videos were found for the current user.'
+                                buttonTitle='Create Video'
+                                reroute='/create'
                             />
                         )}
                         refreshControl={
