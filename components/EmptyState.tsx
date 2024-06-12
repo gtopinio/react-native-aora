@@ -7,11 +7,15 @@ import React from 'react'
 interface EmptyStateProps {
     title: string,
     subtitle: string,
+    buttonTitle?: string,
+    reroute?: string
 }
 
 const EmptyState = ({
     title,
-    subtitle
+    subtitle,
+    buttonTitle,
+    reroute
 }: EmptyStateProps) => {
     return (
         <View
@@ -34,9 +38,9 @@ const EmptyState = ({
             </Text>
 
             <CustomButton
-                title='Create Video'
+                title={buttonTitle as string}
                 containerStyle='w-full my-5'
-                handlePress={() => {router.push('create')}}
+                handlePress={() => {router.push(reroute as string)}}
             />
         </View>
     )

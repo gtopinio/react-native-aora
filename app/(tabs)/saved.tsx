@@ -70,7 +70,9 @@ const Saved = () => {
                 ListEmptyComponent={() => (
                     <EmptyState
                         title='No Videos Found'
-                        subtitle='Be the first to upload a video!'
+                        subtitle='You have not saved any videos yet.'
+                        buttonTitle='Go to Home'
+                        reroute='/home'
                     />
                 )}
                 refreshControl={

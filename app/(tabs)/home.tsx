@@ -109,6 +109,8 @@ const Home = () => {
                     <EmptyState
                         title='No Videos Found'
                         subtitle='Be the first to upload a video!'
+                        buttonTitle='Create Video'
+                        reroute='/create'
                     />
                 )}
                 refreshControl={
